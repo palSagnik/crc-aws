@@ -1,0 +1,46 @@
+name: Build website and upload to s3
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  build-website:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "22.x"
+
+      - name: Install yarn
+        run: npm install -g yarn
+
+      - name: Install dependencies
+        run: cd ./frontend/ && yarn install
+
+      - name: Build the out file
+        run: cd ./frontend/ && npm run build
+  
+  uploading-to-s3:
+    needs: build-website
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --follow-symlinks --delete
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: 'us-east-1'  
+        SOURCE_DIR: './frontend/out' 
+  
+  invalidate-cloudfront-cache:
+    needs: uploading-to-s3
+    runs-on: ubuntu-latest
+    

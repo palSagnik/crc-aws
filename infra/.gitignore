@@ -1,0 +1,6 @@
+#config file
+config.tf
+
+#terraform
+terraform.*
+.terraform/*
