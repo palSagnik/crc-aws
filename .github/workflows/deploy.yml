@@ -37,7 +37,7 @@ jobs:
           SOURCE_DIR: 'frontend/out'
   
   invalidate-cloudfront-cache:
-    needs: uploading-to-s3
+    needs: build-website-and-upload-to-s3
     runs-on: ubuntu-latest
     steps:
       - name: Invalidate CloudFront
