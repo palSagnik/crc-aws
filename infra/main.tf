@@ -40,11 +40,15 @@ resource "aws_cloudfront_distribution" "main" {
     minimum_protocol_version = "TLSv1.2_2021"
     ssl_support_method       = "sni-only"
   }
+
+  tags = {
+    Environment = "crc-cloudfront"
+  }
 }
 
 # This is to set the origin of the cloudfront distribution. Here it is only s3
 resource "aws_cloudfront_origin_access_control" "main" {
-  name                              = "s3-cloudfront-crc-oac"
+  name                              = local.cloudfront_oac_name
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
@@ -92,21 +96,21 @@ resource "aws_route53_record" "main" {
 # Serverless Part:
 # API Gateway -> Lambda -> DynamoDB
 
-resource "aws_dynamodb_table" "visitor-count-db" {
-  name = "resumeVisitorTable"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key = "id"
+# resource "aws_dynamodb_table" "visitor-count-db" {
+#   name = "resumeVisitorTable"
+#   billing_mode = "PAY_PER_REQUEST"
+#   hash_key = "id"
 
-  attribute {
-    name = "id"
-    type = "S"
-  }
+#   attribute {
+#     name = "id"
+#     type = "S"
+#   }
 
-  attribute {
-    name = "visitor"
-    type = "N"
-  }
+#   attribute {
+#     name = "visitor"
+#     type = "N"
+#   }
 
   
   
-}
+# }
