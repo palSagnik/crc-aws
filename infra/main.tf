@@ -95,22 +95,181 @@ resource "aws_route53_record" "main" {
 
 # Serverless Part:
 # API Gateway -> Lambda -> DynamoDB
+# DynamoDB
+resource "aws_dynamodb_table" "visitor-count-db" {
+  name         = "resumeVisitorTable"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "id"
 
-# resource "aws_dynamodb_table" "visitor-count-db" {
-#   name = "resumeVisitorTable"
-#   billing_mode = "PAY_PER_REQUEST"
-#   hash_key = "id"
+  attribute {
+    name = "id"
+    type = "S"
+  }
 
-#   attribute {
-#     name = "id"
-#     type = "S"
-#   }
+  attribute {
+    name = "visitors"
+    type = "N"
+  }
 
-#   attribute {
-#     name = "visitor"
-#     type = "N"
-#   }
+  global_secondary_index {
+    name            = "visitors-count"
+    hash_key        = "visitors"
+    projection_type = "ALL"
+    read_capacity   = 1
+    write_capacity  = 1
+  }
 
-  
-  
-# }
+  tags = {
+    Name = "CRC-AWS"
+  }
+}
+
+# Adding default item
+resource "aws_dynamodb_table_item" "visitor-count-db" {
+  table_name = aws_dynamodb_table.visitor-count-db.name
+  hash_key   = aws_dynamodb_table.visitor-count-db.hash_key
+
+  item = jsonencode(
+    {
+      "id" : { "S" : "visitors-count" },
+      "visitors" : { "N" : "1" }
+    }
+  )
+}
+
+# Lambda 
+# Creation of IAM Role for lambda function
+resource "aws_iam_role" "lambda_role" {
+  name = "aws-resume-lambda-role"
+
+  assume_role_policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Action" : "sts:AssumeRole",
+          "Principal" : {
+            "Service" : "lambda.amazonaws.com"
+          },
+        }
+      ]
+    }
+  )
+}
+
+# Retrieve the current AWS region dynamically
+data "aws_region" "current" {}
+
+# Retrieve the current AWS account ID dynamically
+data "aws_caller_identity" "current" {}
+
+# Creation of IAM Policy for Lambda function to access dynamoDB
+resource "aws_iam_policy" "dynamoDB-lambda-role-policy" {
+  name        = "dynamoDB-lambda-role-policy"
+  path        = "/"
+  description = "AWS IAM Policy for Lambda to Access Dynamo DB"
+
+  policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "dynamodb:GetItem",
+            "dynamodb:Query",
+            "dynamodb:Scan",
+            "dynamodb:PutItem",
+            "dynamodb:UpdateItem"
+          ],
+          "Resource" : "arn:aws:dynamodb:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"
+        }
+      ]
+    }
+  )
+}
+
+# IAM Policy attachment
+resource "aws_iam_role_policy_attachment" "attach-policy-to-role" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = aws_iam_policy.dynamoDB-lambda-role-policy.arn
+}
+
+# Zip file
+data "archive_file" "zip-code" {
+  type        = "zip"
+  source_dir  = "${path.module}/lambda/"
+  output_path = "${path.module}/lambda/lambda_func.zip"
+}
+
+# handler
+resource "aws_lambda_function" "lambda_handler" {
+  function_name = "visitor-count-handler"
+
+  filename   = "${path.module}/lambda/lambda_func.zip"
+  role       = aws_iam_role.lambda_role.arn
+  handler    = "lambda_function.lambda_handler"
+  runtime    = "python3.8"
+  depends_on = [aws_iam_role_policy_attachment.attach-policy-to-role]
+  environment {
+    variables = {
+      databaseName = "resumeVisitorTable"
+    }
+  }
+}
+
+# API Gateway for lambda function handling
+resource "aws_apigatewayv2_api" "visitor-count-api" {
+  name          = "visitor-count-api"
+  protocol_type = "HTTP"
+  description   = "POST API to update visitor count"
+
+  cors_configuration {
+    allow_credentials = false
+    allow_headers     = []
+    allow_origins = [
+      "*",
+    ]
+    allow_methods = [
+      "GET",
+    "POST"]
+    max_age = 0
+  }
+}
+
+# API Gateway Stage
+resource "aws_apigatewayv2_stage" "init" {
+  api_id      = aws_apigatewayv2_api.visitor-count-api.id
+  name        = "init"
+  auto_deploy = true
+}
+
+# API Gateway Integration
+resource "aws_apigatewayv2_integration" "visitor-count-api-integration" {
+  api_id             = aws_apigatewayv2_api.visitor-count-api.id
+  integration_uri    = aws_lambda_function.lambda_handler.invoke_arn
+  integration_type   = "AWS_PROXY"
+  integration_method = "POST"
+}
+
+# Routing queries from a public exposed url to lambda function
+resource "aws_apigatewayv2_route" "visitor-count-api-route" {
+  api_id    = aws_apigatewayv2_api.visitor-count-api.id
+  route_key = "ANY /countVisitors"
+  target    = "integrations/${aws_apigatewayv2_integration.visitor-count-api-integration.id}"
+}
+
+# Setting permission to invoke lambda function from
+resource "aws_lambda_permission" "api-gw" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda_handler.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_apigatewayv2_api.visitor-count-api.execution_arn}/*"
+}
+
+output "baseUrl" {
+  value = "${aws_apigatewayv2_stage.init.invoke_url}/countVisitors"
+}

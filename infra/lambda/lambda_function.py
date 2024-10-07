@@ -4,11 +4,12 @@ from decimal import Decimal
 
 client = boto3.client('dynamodb')
 dynamodb = boto3.resource("dynamodb")
-table = dynamodb.Table('resume-visitor-count')
-tableName = 'resume-visitor-count'
+table = dynamodb.Table('resumeVisitorTable')
+tableName = 'resumeVisitorTable'
 
 def lambda_handler(event, context):
     try:
+        statusCode = 200
         response = table.update_item(
             Key={
                 "id": "visitors-count"},
@@ -18,30 +19,17 @@ def lambda_handler(event, context):
         )
         body = json.dumps({"count": int(response['Attributes']['visitors'])})
         
-    except:
-        # Means table is empty
-        putItem = table.put_item(
-            Item = {
-                "id" : "visitors-count",
-                "visitors": 1
-            }
-        )
-
-        # getting count of 1
-        response = table.get_item(
-            Key = {
-                "id": "visitors-count"
-            }
-        )
-
-        body = json.dumps({"count": int(response['Item']['visitors'])})
+    except Exception as e:
+        statusCode = 400
+        body = json.dumps({"error": str(e)})
     
     apiRes = {
-        "statusCode": 200,
+        "statusCode": statusCode,
         'headers': {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
         },
         "body": body
     }
+    
     return apiRes
