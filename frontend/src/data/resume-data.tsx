@@ -6,9 +6,9 @@ export const RESUME_DATA = {
   location: "India",
   locationLink: "https://www.google.com/maps/place/India",
   about:
-    "Detail-oriented Full Stack Engineer dedicated to building high-quality products.",
+    "A student with a passion in cloud computing, kubernetes, backend engineering curious about quantum computing applications.",
   summary:
-    "As a Full Stack Engineer, I specialize in taking products from concept to launch. I excel in leading teams and creating environments where individuals perform at their best. Currently, I work mostly with TypeScript, React, Node.js, and GraphQL. I have over 8 years of experience working remotely with companies worldwide.",
+    "As an upcoming engineer, I specialize in the applications of cloud in building distributable software. I excel in logic as well have an avid interest as a backend engineer, and also like to fiddle with computer networks, quantum applications, os.",
   contact: {
     email: "palsagnik2102@gmail.com",
     tel: "+91-6364558467",
@@ -42,13 +42,15 @@ export const RESUME_DATA = {
       start: "Dec 2023",
       end: "Feb 2024",
       description:
-        "Implemented new features, led a squad, improved code delivery process, and initiated migration from Emotion to Tailwind CSS. Technologies: React, TypeScript, GraphQL",
+        "Orchestrated comprehensive security audits targeting client-side vulnerabilities (XSS, CSRF) and server-side threats which were then identified and mitigated.",
     },
   ],
   skills: [
+    "Linux",
     "Golang",
     "Python",
     "Flask",
+    "ARM Assembly",
     "Docker",
     "Kubernetes",
     "Terraform",    
@@ -57,31 +59,13 @@ export const RESUME_DATA = {
   ],
   certifications: [
     {
-      title: "AWS Cloud Certified Practitioner",
+      title: "AWS Cloud Certified Practitioner (AWS-CCP)",
       description: "A beginner level AWS cloud certification",
-      link: {
-        label: "AWC CCP",
-        href: "xyz.com"
-      },
+      link: "xyz.com",
       issued: "October 2024"
     }
   ],
   projects: [
-    {
-      title: "Decentralised Storage",
-      techStack: [
-        "Backend Development",
-        "Golang",
-        "Docker",
-        "Encrypted Storage"
-      ],
-      description:
-        "A secure decentralised storage backend solution written in Go",
-      link: {
-        label: "github.com",
-        href: "https://github.com/palSagnik/Distributed-File-Storage",
-      },
-    },
     {
       title: "Cloud AWS Challenge",
       techStack: [
@@ -99,5 +83,36 @@ export const RESUME_DATA = {
         href: "https://github.com/palSagnik/crc-aws",
       },
     },
+    {
+      title: "Decentralised Storage",
+      techStack: [
+        "Backend Development",
+        "Golang",
+        "Docker",
+        "Encrypted Storage"
+      ],
+      description:
+        "A secure decentralised storage backend solution written in Go",
+      link: {
+        label: "github.com",
+        href: "https://github.com/palSagnik/Distributed-File-Storage",
+      },
+    },
+  ],
+  blogs: [
+    {
+      title: "AWS Blog",
+      description: "A beginner level AWS cloud blog",
+      link: {
+        label: "medium.com",
+        href: "https://medium.com/@palsagnik2102"
+      },
+      topics: [
+        "AWS",
+        "Serverless",
+        "Terraform",
+        "Cloud"
+      ]
+    }
   ],
 } as const;
