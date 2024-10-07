@@ -8,7 +8,8 @@ export default function Navbar() {
     const [visitorCount, setVisitorCount] = useState<number | null>(null);
     const [hasFetched, setHasFetched] = useState(false);
 
-    const fetchVisitorCount = async () => {
+    useEffect(() => {
+      const fetchVisitorCount = async () => {
         try {
             const response = await fetch("https://z95hfzvlve.execute-api.us-east-1.amazonaws.com/init/countVisitors");
             const data = await response.json();
@@ -17,12 +18,11 @@ export default function Navbar() {
             console.error('Error Fetching Visitor Count')
         }
     };
-    
-    useEffect(() => {
-        if (!hasFetched) {
-            fetchVisitorCount();
-            setHasFetched(true);
-        }
+
+    if (!hasFetched) {
+      setHasFetched(true);
+      fetchVisitorCount();
+    }
     }, [hasFetched]);
 
   return (
