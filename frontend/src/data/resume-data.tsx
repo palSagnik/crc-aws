@@ -55,6 +55,17 @@ export const RESUME_DATA = {
     "Amazon Web Services",
     "Quantum Computing",
   ],
+  certifications: [
+    {
+      title: "AWS Cloud Certified Practitioner",
+      description: "A beginner level AWS cloud certification",
+      link: {
+        label: "AWC CCP",
+        href: "xyz.com"
+      },
+      issued: "October 2024"
+    }
+  ],
   projects: [
     {
       title: "Decentralised Storage",
