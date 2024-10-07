@@ -270,6 +270,10 @@ resource "aws_lambda_permission" "api-gw" {
   source_arn = "${aws_apigatewayv2_api.visitor-count-api.execution_arn}/*"
 }
 
-output "baseUrl" {
+output "apigw-public-url" {
   value = "${aws_apigatewayv2_stage.init.invoke_url}/countVisitors"
+}
+
+output "cloudfront-distribution-id" {
+  value = "${aws_cloudfront_distribution.main.id}"
 }
