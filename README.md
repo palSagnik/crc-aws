@@ -5,6 +5,12 @@ This project really tested my knowledge of AWS Services and integrating them. Th
 
 This is built using AWS as well as Terraform for Infrastructure as Code. This repo can also be used with any type of nextjs project, I have plans to make this into a template repository.      
 
+
+## Infrastructure
+
+![Alt Text](assets/CRC-AWS-Architecture.png)
+
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
