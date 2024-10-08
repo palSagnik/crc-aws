@@ -1,6 +1,9 @@
 # Cloud Resume
 
-This is my iteration of Forrest Brazeal's cloud resume challenge. This is built using AWS as well as Terraform for Infrastructure as Code. This repo can also be used with any type of nextjs project, I have plans to make this into a template repository.
+This is my iteration of Forrest Brazeal's cloud resume challenge.
+This project really tested my knowledge of AWS Services and integrating them. The manual point and click form was ready within a day. Infrastructure as code was the real challenge.
+
+This is built using AWS as well as Terraform for Infrastructure as Code. This repo can also be used with any type of nextjs project, I have plans to make this into a template repository.      
 
 ## Getting Started
 
@@ -8,53 +11,67 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+* Clone the repository and move into the frontend directory
 
-```
-git clone 
-```
+  ```
+  git clone https://github.com/palSagnik/crc-aws.git
+  ```
+  ```
+  cd frontend/
+  ```
 
-### Installing
+* Install all the dependencies using yarn
 
-A step by step series of examples that tell you how to get a development env running
+  ```
+  yarn install
+  ```
 
-Say what the step will be
+ * If you dont have terraform install it after reading the instructions below
 
-```
-Give the example
-```
+   [Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 
-And repeat
+### Setting up Terraform with AWS
 
-```
-until finished
-```
 
-End with an example of getting some data out of the system or using it for a little demo
 
-## Running the tests
+* Set up a hosted-zone using a domain bought from a Domain Registrar like (Namecheap, Hostinger) and replace their nameservers with the ones in Route 53. Then create a certificate for the same records.
 
-Explain how to run the automated tests for this system
+  In a `config.tf` file, write down the details which must not be made public.
+  ```
+  terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+  }
+  
+  provider "aws" {
+    region = "us-east-1"
+  }
+  
+  locals {
+    s3_bucket_name      = "some unique name"
+    domain              = "domain you bought"
+    hosted_zone_id      = "ID of the Route53 hosted zone"
+    cert_arn            = "arn:aws:acm:XXXXXXXXXXXXXXXX"
+    cloudfront_oac_name = "some name"
+  }
+  ```
 
-### Break down into end to end tests
+And you are good to go.
 
-Explain what these tests test and why
 
-```
-Give an example
-```
+## Development and Deployment
 
-### And coding style tests
+* Run a development server in `frontend/` and make changes as you like.
+  ```
+  yarn dev
+  ```
+* After that run `./init.sh` and your ci/cd pipeline would start. If everything works out, voila now you have your own cloud resume.
+* If there is any changes to the infrastructure, just run `terraform apply` to the new file and terraform would handle it.
 
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
