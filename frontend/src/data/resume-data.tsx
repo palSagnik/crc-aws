@@ -61,7 +61,7 @@ export const RESUME_DATA = {
     {
       title: "AWS Cloud Certified Practitioner (AWS-CCP)",
       description: "A beginner level AWS cloud certification",
-      link: "xyz.com",
+      link: "https://www.linkedin.com/in/sagnik-pal-0152b8256/",
       issued: "October 2024"
     }
   ],
@@ -77,7 +77,7 @@ export const RESUME_DATA = {
         "Cloud Computing"
       ],
       description:
-        "A secure decentralised storage backend solution written in Go",
+        "The AWS Version of Cloud Resume Challenge. A NextJS resume hosted by AWS Services like S3, Cloudfront, Lambda, API Gateway and DynamoDB. All the infrastructure was spun up using terraform using the principle of IaC.",
       link: {
         label: "github.com",
         href: "https://github.com/palSagnik/crc-aws",
