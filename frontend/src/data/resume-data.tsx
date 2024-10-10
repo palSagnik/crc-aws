@@ -20,7 +20,7 @@ export const RESUME_DATA = {
       },
       {
         name: "LinkedIn",
-        url: "https://www.linkedin.com/in/sagnik-pal-0152b8256/",
+        url: "https://www.linkedin.com/in/sagnik-pal-iitism/",
         icon: LinkedInIcon,
       },
     ],
@@ -61,7 +61,7 @@ export const RESUME_DATA = {
     {
       title: "AWS Cloud Certified Practitioner (AWS-CCP)",
       description: "A beginner level AWS cloud certification",
-      link: "https://www.linkedin.com/in/sagnik-pal-0152b8256/",
+      link: "https://www.linkedin.com/in/sagnik-pal-iitism/",
       issued: "October 2024"
     }
   ],
