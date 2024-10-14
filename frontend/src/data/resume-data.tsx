@@ -98,14 +98,31 @@ export const RESUME_DATA = {
         href: "https://github.com/palSagnik/Distributed-File-Storage",
       },
     },
+    {
+      title: "Networking In Go",
+      techStack: [
+        "Networking Services",
+        "Golang",
+        "TCP",
+        "HTTP",
+        "Cryptography"
+
+      ],
+      description:
+        "A project containing of different networking tools written in Golang such as scanners, proxies, load balancers and many more",
+      link: {
+        label: "github.com",
+        href: "https://github.com/palSagnik/networking-go",
+      },
+    },
   ],
   blogs: [
     {
-      title: "AWS Blog",
-      description: "A beginner level AWS cloud blog",
+      title: "AWS Project Blog",
+      description: "A semi-technical blog on the challenge where I describe how I dealt with various challenges of the project.",
       link: {
-        label: "medium.com",
-        href: "https://medium.com/@palsagnik2102"
+        label: "hashnode.com",
+        href: "https://dev-journal-sagnik.hashnode.dev/how-i-completed-the-cloud-resume-challenge-a-personal-journey"
       },
       topics: [
         "AWS",
