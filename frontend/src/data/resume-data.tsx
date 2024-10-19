@@ -56,6 +56,7 @@ export const RESUME_DATA = {
     "Terraform",    
     "Amazon Web Services",
     "Quantum Computing",
+    "Networking",
   ],
   certifications: [
     {
