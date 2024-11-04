@@ -62,8 +62,8 @@ export const RESUME_DATA = {
     {
       title: "AWS Cloud Certified Practitioner (AWS-CCP)",
       description: "A beginner level AWS cloud certification",
-      link: "https://www.linkedin.com/in/sagnik-pal-iitism/",
-      issued: "October 2024"
+      link: "https://www.credly.com/badges/30c120a8-b0a2-40bf-90c4-766fc20d86cb",
+      issued: "November 2024"
     }
   ],
   projects: [
@@ -114,6 +114,20 @@ export const RESUME_DATA = {
       link: {
         label: "github.com",
         href: "https://github.com/palSagnik/networking-go",
+      },
+    },
+    {
+      title: "Hermes",
+      techStack: [
+        "Golang",
+        "Docker",
+        "PostgreSQL",
+      ],
+      description:
+        "A user authentication, signin and verification backend template for golang websites.",
+      link: {
+        label: "github.com",
+        href: "https://github.com/palSagnik/hermes",
       },
     },
   ],
