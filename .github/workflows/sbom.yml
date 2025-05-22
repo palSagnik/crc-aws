@@ -8,9 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Anchore SBOM Action
-      uses: anchore/sbom-action@v0.16.0
+      uses: actions/checkout@v4
+    - name: Generate SBOM
+      run: |
+          syft packages . -o ./sbom.json
     - name: Upload SBOM as artifact
       uses: actions/upload-artifact@v4
       with:
