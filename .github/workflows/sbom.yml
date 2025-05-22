@@ -12,7 +12,7 @@ jobs:
     - name: Generate SBOM with Syft
       run: |
           curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
-          syft packages -f spdx -o sbom.spdx.json .
+          syft scan -f spdx -o sbom.spdx.json .
           # Optional:  Verify SBOM (example)
           # syft packages -f spdx -o sbom.spdx.json . | jq .
 
