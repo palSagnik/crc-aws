@@ -16,8 +16,8 @@ jobs:
 
     - name: Commit SBOM
       run: |
-          git config user.email "palsagnik2102@gmail.com"
-          git config user.name  "SAGNIK PAL"
+          git config --global user.email "palsagnik2102@gmail.com"
+          git config --global user.name  "SAGNIK PAL"
           git add sbom.json
           git commit -m "Add SBOM" -a --allow-empty
           git push --all
