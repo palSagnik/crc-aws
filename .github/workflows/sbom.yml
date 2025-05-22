@@ -9,11 +9,17 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: Generate SBOM
+    - name: Generate SBOM with Syft
       run: |
-          syft packages . -o ./sbom.json
-    - name: Upload SBOM as artifact
-      uses: actions/upload-artifact@v4
-      with:
-       name: sbom
-       path: sbom.json
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+          syft packages -f spdx -o sbom.spdx.json .
+          # Optional:  Verify SBOM (example)
+          # syft packages -f spdx -o sbom.spdx.json . | jq .
+
+    - name: Commit SBOM
+      run: |
+          git config --global user.email "github-actions@example.com"
+          git config --global user.name "GitHub Actions"
+          git add sbom.spdx.json
+          git commit -m "Add SBOM" -a --allow-empty
+          git push --all
