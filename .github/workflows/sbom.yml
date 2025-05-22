@@ -1,0 +1,13 @@
+name: Generate SBOM
+on:
+ push:
+  branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Anchore SBOM Action
+      uses: anchore/sbom-action@v0.16.0
