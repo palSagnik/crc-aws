@@ -12,14 +12,11 @@ jobs:
     - name: Generate SBOM with Syft
       run: |
           curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
-          syft scan -f spdx -o sbom.spdx.json .
-          # Optional:  Verify SBOM (example)
-          # syft packages -f spdx -o sbom.spdx.json . | jq .
+          syft . -o spdx=sbom.json
 
     - name: Commit SBOM
       run: |
-          git config --global user.email "github-actions@example.com"
-          git config --global user.name "GitHub Actions"
-          git add sbom.spdx.json
+          git config --global user.email "palsagnik2102@gmail.com"
+          git add sbom.json
           git commit -m "Add SBOM" -a --allow-empty
           git push --all
