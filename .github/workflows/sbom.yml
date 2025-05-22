@@ -17,10 +17,8 @@ jobs:
           curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
           syft . -o spdx=sbom.json
 
-    - name: Commit SBOM
-      run: |
-          git config --global user.email "palsagnik2102@gmail.com"
-          git config --global user.name  "SAGNIK PAL"
-          git add sbom.json
-          git commit -m "Add SBOM" -a --allow-empty
-          git push --all
+    - name: Upload SBOM as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: sbom
+        path: sbom.json
