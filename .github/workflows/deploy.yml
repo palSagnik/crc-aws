@@ -9,6 +9,19 @@ permissions:
   contents: read
 
 jobs:
+  security_scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Scan for vulnerabilities
+        uses: anchore/scan-action@v3
+        with:
+          path: "./"
+          fail-build: true
+          severity-cutoff: "high"
+
   build-website-and-upload-to-s3:
     runs-on: ubuntu-latest
     steps:
