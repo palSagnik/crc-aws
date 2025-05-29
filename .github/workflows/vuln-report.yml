@@ -1,0 +1,39 @@
+name: Vulnerability Report Generation
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  vulnerability-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Grype scan
+        uses: anchore/scan-action@v3
+        id: grype-scan
+        with:
+          path: "./"
+          fail-build: false
+          severity-cutoff: "medium"
+          output-format: "json"
+          output-file: "grype-report.json"
+          acs-report-enable: true
+
+      - name: Upload SARIF report
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ steps.grype-scan.outputs.sarif }}
+
+      - name: Archive vulnerability report
+        uses: actions/upload-artifact@v4
+        with:
+          name: grype-vulnerability-report
+          path: |
+            grype-report.json
+            ${{ steps.grype-scan.outputs.sarif }}
+
