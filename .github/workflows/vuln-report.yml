@@ -17,15 +17,18 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Grype scan
+        id: grype_scan
         uses: anchore/scan-action@v3
         with:
           path: "./"
           fail-build: false
-          output-format: "json"
-          output-file: "grype-report.json"
+          output-format: "json"  # or "sarif" if you want SARIF
 
-      - name: Upload JSON report
+      - name: Show Grype report path
+        run: echo "Grype report path is ${{ steps.grype_scan.outputs.report }}"
+      
+      - name: Upload Grype report artifact
         uses: actions/upload-artifact@v4
         with:
           name: grype-vulnerability-report
-          path: grype-report.json
+          path: ${{ steps.grype_scan.outputs.report }}
