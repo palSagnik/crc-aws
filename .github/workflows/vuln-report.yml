@@ -10,31 +10,22 @@ jobs:
   vulnerability-scan:
     runs-on: ubuntu-latest
     permissions:
-      security-events: write
-      actions: read
       contents: read
-      
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Run Grype scan
         uses: anchore/scan-action@v3
-        id: grype-scan
         with:
           path: "./"
           fail-build: false
-          severity-cutoff: "medium"
-          output-format: "sarif"
-          output-file: "grype-report.sarif"  # Explicit filename
+          output-format: "json"
+          output-file: "grype-report.json"
 
-      - name: Upload SARIF report
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: grype-report.sarif  # Direct file reference
-
-      - name: Archive report
+      - name: Upload JSON report
         uses: actions/upload-artifact@v4
         with:
-          name: security-reports
-          path: grype-report.sarif
+          name: grype-vulnerability-report
+          path: grype-report.json
