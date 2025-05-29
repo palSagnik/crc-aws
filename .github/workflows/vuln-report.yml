@@ -9,6 +9,11 @@ on:
 jobs:
   vulnerability-scan:
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+      
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -20,20 +25,16 @@ jobs:
           path: "./"
           fail-build: false
           severity-cutoff: "medium"
-          output-format: "json"
-          output-file: "grype-report.json"
-          acs-report-enable: true
+          output-format: "sarif"
+          output-file: "grype-report.sarif"  # Explicit filename
 
       - name: Upload SARIF report
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: ${{ steps.grype-scan.outputs.sarif }}
+          sarif_file: grype-report.sarif  # Direct file reference
 
-      - name: Archive vulnerability report
+      - name: Archive report
         uses: actions/upload-artifact@v4
         with:
-          name: grype-vulnerability-report
-          path: |
-            grype-report.json
-            ${{ steps.grype-scan.outputs.sarif }}
-
+          name: security-reports
+          path: grype-report.sarif
