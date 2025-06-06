@@ -19,7 +19,7 @@ jobs:
           target: 'https://cv.sagnik-pal.tech/' 
           cmd_options: '-a'
           fail_action: false  
-          rules_file_name: '.zap/rules.tsv
+          rules_file_name: '.zap/rules.tsv'
 
       - name: Confirm ZAP report exists
         run: |
