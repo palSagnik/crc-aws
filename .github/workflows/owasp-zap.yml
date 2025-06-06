@@ -1,0 +1,33 @@
+name: OWASP ZAP Scan
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 3 * * *'  # Optional: run daily at 3 AM UTC
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run OWASP ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.4.0
+        with:
+          target: 'https://cv.sagnik-pal.tech/' 
+          cmd_options: '-a'
+          fail_action: false  
+          rules_file_name: '.zap/rules.tsv
+
+      - name: Confirm ZAP report exists
+        run: |
+          echo "Checking for zap_report.html..."
+          ls -lh zap_report.html || (echo "❌ ZAP report not found!" && exit 1)
+
+      - name: Upload ZAP HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-report
+          path: zap_report.html
