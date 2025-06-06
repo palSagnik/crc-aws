@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Run OWASP ZAP Baseline Scan
-        uses: zaproxy/action-baseline@v0.4.0
+        uses: zaproxy/action-baseline@v0.10.0
         with:
           target: 'https://cv.sagnik-pal.tech/' 
           cmd_options: '-a'
