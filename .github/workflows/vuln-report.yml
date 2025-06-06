@@ -17,21 +17,21 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Grype scan
-        id: grype_scan
         uses: anchore/scan-action@v3
         with:
           path: "./"
           fail-build: false
           output-format: "json"
-      
-      - name: Show Grype Report Info
+
+      - name: Confirm report file exists
         run: |
-          echo "Grype report generated:"
-          echo "Path: ${{ steps.grype_scan.outputs.report }}"
-          ls -lh ${{ steps.grype_scan.outputs.report }} || echo "File not found"
+          echo "Listing files to confirm report presence..."
+          ls -lh
+          echo "Expected report: results.json"
+          test -f results.json && echo "✅ Found results.json" || echo "❌ Missing results.json"
 
       - name: Upload Grype report artifact
         uses: actions/upload-artifact@v4
         with:
           name: grype-vulnerability-report
-          path: ${{ steps.grype_scan.outputs.report }}
+          path: results.json
