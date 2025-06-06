@@ -28,7 +28,7 @@
     "reflect-metadata": "^0.2.2",
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
-    "type-graphql": "^2.0.0-beta.6",
+    "type-graphql": "^2.0.0-rc.2",
     "vaul": "^1.1.2"
   },
   "devDependencies": {
