@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,11 +22,14 @@ jobs:
         with:
           path: "./"
           fail-build: false
-          output-format: "json"  # or "sarif" if you want SARIF
-
-      - name: Show Grype report path
-        run: echo "Grype report path is ${{ steps.grype_scan.outputs.report }}"
+          output-format: "json"
       
+      - name: Show Grype Report Info
+        run: |
+          echo "Grype report generated:"
+          echo "Path: ${{ steps.grype_scan.outputs.report }}"
+          ls -lh ${{ steps.grype_scan.outputs.report }} || echo "File not found"
+
       - name: Upload Grype report artifact
         uses: actions/upload-artifact@v4
         with:
